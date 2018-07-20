@@ -41,7 +41,7 @@ class math_lib:
             for i in range(number, 0, -1):
                 ret = ret * i
         return ret
-    
+    #log returns a gloat number in a string format
     def log(self, base, x):
         exp = 0;
         pow_ten = 0
