@@ -7,6 +7,10 @@ Created on Mon Jul 16 10:38:40 2018
 import sys
 from random import randint
 
+
+"""
+remember to put a try catch function in every method in this script
+"""
 class kinematic_object:
     
     def __init__(self, distance = None, initial_velocity = None, final_velocity = None, acceleration = None, time = None):
@@ -30,6 +34,39 @@ class kinematic_object:
         
 class math_lib:
     
+    #the reason there is no tangent function is becuase tan(r) = sin(r) / cos(r)
+    
+    def sin(self, radians):
+        ans = radians
+        # 0 means add and 1 means subtract
+        add_sub = 1
+        for i in range(3, 41, 2):
+            r = self.raise_to_power(radians, i)/self.factorial(i)
+            if add_sub == 1:
+                ans-=r
+                add_sub = 0
+            else:
+                ans+=r
+                add_sub = 1
+        return ans
+    
+    def cos(self, radians):
+        ans = 1
+        # 0 means add and 1 means subtract
+        add_sub = 1
+        for i in range(2, 41, 2):
+            r = self.raise_to_power(radians, i)/self.factorial(i)
+            if add_sub == 1:
+                ans -= r
+                add_sub = 0
+            else:
+                ans += r
+                add_sub = 1
+        return ans
+    
+    def pi(self):
+        return 3.1415926535897932384626433
+    
     def raise_to_power(self, x, y):
         return x**y
     
@@ -41,7 +78,7 @@ class math_lib:
             for i in range(number, 0, -1):
                 ret = ret * i
         return ret
-    #log returns a gloat number in a string format
+    
     def log(self, base, x):
         exp = 0;
         pow_ten = 0
@@ -133,9 +170,15 @@ class physics_and_astronomy:
             return energy / planck_constant
         else:
             return speed_of_light / wavelength
-        
+    
+    #ke = p^2/2m
+    def kinetic_energy_power(self, mass, power):
+        if(mass is None or power is None):
+            return None
+        return (power * power)/(2.0*mass)
+    
     def kinetic_energy(self, mass, velocity):
-        if(mass is None and velocity is None):
+        if(mass is None or velocity is None):
             return None
         return 1.0/2*mass*velocity*velocity
     
@@ -157,15 +200,19 @@ class physics_and_astronomy:
         return self.math.sqrt((3 * k * temprature) / mass)
     
     #unfinished you need to implement a cos function in the math library
-    def power_velocity(self, force, velocity, theta):
-        return force * velocity * self.math.cos(theta)
+    def power_velocity(self, force, velocity, radians=None, degrees=None):
+        if degrees is None and radians is None:
+            return None
+        if degrees is not None:
+            radians = (degrees/180.0)*self.math.pi
+        return force * velocity * self.math.cos(radians)
     
     def energy_from_mass_conversion(self, mass):
-        speed_of_light = 299792458
+        speed_of_light = 299792458.0
         return mass * speed_of_light * speed_of_light
     
     def mass_from_energy_conversion(self, energy):
-        speed_of_light = 299792458
+        speed_of_light = 299792458.0
         return energy / (speed_of_light * speed_of_light)
     
     def create_combinations(self, list_of_items, length_of_each_combination):
@@ -255,7 +302,71 @@ class physics_and_astronomy:
                 kinematic_variables.acceleration = a
                 calculations_done = True
                 return kinematic_variables
-            
+    
+    def static_fric(self, coeficient, normal):
+        return coeficient * float(normal)
+    
+    def kinetic_friction(self, coeficient, normal):
+        return coeficient * float(normal)
+    
+    def momentum(self, mass, velocity):
+        return mass * float(velocity)
+    
+    def impulse(self, force, initial_time = None, final_time = None, change_in_time = None):
+        if((final_time is None and change_in_time is None) or (initial_time is None and change_in_time is None)):
+            return None
+        if(final_time < 0 or initial_time < 0):
+            return None
+        if(initial_time is not None and final_time is not None and change_in_time is None):
+            change_in_time = float(final_time) - initial_time
+        return force * change_in_time
+    
+    def work(self, time = None, power = None):
+        if(power is not None and time is not None):
+            return power * float(time)
+        else:
+            return None
+    
+    def universal_gravitation(self, mass_one, mass_two, radius):
+        gravitational_constant = 6.67408 * self.math.raise_to_power(10.0, -11)
+        return (gravitational_constant * mass_one * mass_two)/(float(radius)*radius)
+    
+    def gravitational_field(self, mass, radius):
+        gravitational_constant = 6.67408 * self.math.raise_to_power(10.0, -11)
+        return (gravitational_constant * mass)/(radius*float(radius))
+        
+    def gravitational_potential_energy(self, mass_one, mass_two, radius):
+        gravitational_constant = 6.67408 * self.math.raise_to_power(10.0, -11)
+        return (gravitational_constant * mass_one * mass_two)/(float(radius))
+    
+    def gravitational_potential(self, mass, radius):
+        gravitational_constant = 6.67408 * self.math.raise_to_power(10.0, -11)
+        return (gravitational_constant * mass)/(float(radius))
+    
+    def orbital_speed(self, mass, radius):
+        gravitational_constant = 6.67408 * self.math.raise_to_power(10.0, -11)
+        return self.math.sqrt((gravitational_constant * mass)/float(radius))
+    
+    def escape_speed(self, mass, radius):
+        gravitational_constant = 6.67408 * self.math.raise_to_power(10.0, -11)
+        return self.math.sqrt((2.0 * gravitational_constant * mass)/float(radius))
+    
+    def elastic_potential_energy(self, k, distance):
+        return 1/2.0*k*distance*distance
+    
+    def density(self, mass, volume):
+        return float(mass)/volume
+    
+    def pressure(self, force, area_covered):
+        return float(force)/area_covered
+    
+    def pressure_in_fluid(self, initial_pressure, density_of_fluid, gravity, depth):
+        return initial_pressure + density_of_fluid*gravity*float(depth)
+    
+    def buoyancy(self, density, gravity, volume):
+        return density*gravity*float(volume)
+    
+    
 def main():
     m = physics_and_astronomy()
     k  = kinematic_object(distance = 3, final_velocity = 1, acceleration = 2)
