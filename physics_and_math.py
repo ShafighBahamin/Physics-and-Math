@@ -63,6 +63,7 @@ class math_lib:
                 ans += r
                 add_sub = 1
         return ans
+    
     #maybe implement a monte carlo multithreaded algorithm to calc pi
     def pi(self):
         return 3.1415926535897932384626433
