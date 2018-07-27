@@ -304,7 +304,7 @@ class physics_and_astronomy:
                 calculations_done = True
                 return kinematic_variables
     
-    def static_fric(self, coeficient, normal):
+    def static_friction(self, coeficient, normal):
         return coeficient * float(normal)
     
     def kinetic_friction(self, coeficient, normal):
