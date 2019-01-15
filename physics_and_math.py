@@ -81,23 +81,41 @@ class math_lib:
         return ret
     
     def log(self, base, x):
-        exp = 0;
-        pow_ten = 0
-        ans = ""
-        for i in range(0, 20):
-            while(pow_ten < x):
-                exp+=1
-                pow_ten = self.raise_to_power(base, exp)
-            exp-=1
-            pow_ten = self.raise_to_power(base, exp)
-            ans +=str(exp)
-            if len(ans) == 1:
-                ans+='.'
-            res = x/float(pow_ten)
-            x = res**float(base)
-            exp = 0
-            pow_ten = 0
+        if base == 1:
+            return 0
+        ans = 0.0
+        exp = self.sqrt(x)
+        prev = 0.0
+        while(True):
+            ans = self.raise_to_power(base, exp)
+            if(ans + .0000001 < x + .000001 and ans + .0000001 > x - .000001):
+                return exp
+            elif(ans > x):
+                prev = exp
+                exp = float(exp) - exp/2.0
+            else:
+                exp = float(exp) + float(prev - exp)/2.0
         return ans
+    
+    #only works for base 10
+    #def log(self, base, x):
+     #   exp = 0;
+     #   pow_ten = 0
+     #   ans = ""
+     #   for i in range(0, 20):
+     #       while(pow_ten < x):
+     #           exp+=1
+     #           pow_ten = self.raise_to_power(base, exp)
+     #       exp-=1
+     #       pow_ten = self.raise_to_power(base, exp)
+     #       ans +=str(exp)
+     #       if len(ans) == 1:
+     #           ans+='.'
+     #       res = x/float(pow_ten)
+     #       x = res**float(base)
+     #       exp = 0
+     #       pow_ten = 0
+     #   return ans
                
     def sqrt(self, number):
         ans = (number/2.0) / 2.0
